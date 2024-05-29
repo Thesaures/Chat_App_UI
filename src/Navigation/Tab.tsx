@@ -5,6 +5,7 @@ import { Image, TouchableOpacity, View } from 'react-native';
 import Individual from '../screens/Individual';
 import Message from '../screens/Message';
 import Phone from '../screens/Phone';
+import Dummy from '../screens/Dummy';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const Tab = createBottomTabNavigator();
 const CustomButton = () => {
@@ -31,38 +32,38 @@ const BottomTab = () => {
       <Tab.Navigator
         // initialRouteName="List"
         screenOptions={{
-          //   tabBarShowLabel: false,
-          tabBarActiveTintColor: '#703EFF',
-          tabBarInactiveTintColor: 'red',
-          //   tabBarStyle: {
-          //     backgroundColor: '#FFFFFF',
-          //     height: 90,
-          //     borderTopLeftRadius: 50,
-          //     borderTopRightRadius: 50,
-          //   },
+          tabBarShowLabel: false,
+          //   tabBarActiveTintColor: '#703EFF',
+          //   tabBarInactiveTintColor: 'red',
+          tabBarStyle: {
+            backgroundColor: '#FFFFFF',
+            height: 90,
+            borderTopLeftRadius: 50,
+            borderTopRightRadius: 50,
+          },
         }}
       >
         <Tab.Screen
           name="List"
           component={List}
           options={{
+            tabBarActiveTintColor: '#703EFF',
             headerShown: false,
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="web" size={30} color="#703EFF" />
-            ),
+            tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="web" size={30} />,
           }}
         />
         <Tab.Screen
           name="Hom"
           component={Home}
           options={{
+            tabBarActiveTintColor: '#703EFF',
             headerShown: false,
             tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="chat" size={30} />,
           }}
         />
 
         <Tab.Screen
-          name="Lis"
+          name="Individual"
           component={Individual}
           options={{
             // tabBarIcon: ({ color, size }) => (
@@ -72,9 +73,10 @@ const BottomTab = () => {
           }}
         />
         <Tab.Screen
-          name="Phone"
-          component={Phone}
+          name="Dummy"
+          component={Dummy}
           options={{
+            headerShown: false,
             tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="phone" size={30} />,
           }}
         />

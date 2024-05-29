@@ -1,6 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View, Image, ImageSourcePropType } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Individual from '../screens/Individual';
 type card = {
   image: ImageSourcePropType | undefined;
   name: string;
@@ -13,29 +16,35 @@ type card = {
 const Card = (props: card) => {
   const { image, name, message, numberOfMessage, time, status, messageStatus } = props;
   const personOne = require('../assets/images/photo.jpg');
+  const navigation = useNavigation();
+  const navigating = () => {
+    navigation.navigate('Phone');
+  };
   return (
     <>
-      <View style={styles.card}>
-        <View style={styles.profile}>
-          <Image source={image} style={styles.image} />
-          <View style={styles.active}>
-            <View style={{ ...styles.activeInside, backgroundColor: status }} />
+      <TouchableOpacity onPress={navigating}>
+        <View style={styles.card}>
+          <View style={styles.profile}>
+            <Image source={image} style={styles.image} />
+            <View style={styles.active}>
+              <View style={{ ...styles.activeInside, backgroundColor: status }} />
+            </View>
+          </View>
+          <View style={styles.nameMessage}>
+            <Text style={styles.name}>{name}</Text>
+            <View style={styles.message}>
+              <Icon name={'done-all'} size={20} />
+              <Text style={{ marginLeft: 10 }}>{message}</Text>
+            </View>
+          </View>
+          <View style={styles.time}>
+            <Text>{time}</Text>
+            <View style={styles.count}>
+              <Text style={styles.countText}>{numberOfMessage}</Text>
+            </View>
           </View>
         </View>
-        <View style={styles.nameMessage}>
-          <Text style={styles.name}>{name}</Text>
-          <View style={styles.message}>
-            <Icon name={'done-all'} size={20} />
-            <Text style={{ marginLeft: 10 }}>{message}</Text>
-          </View>
-        </View>
-        <View style={styles.time}>
-          <Text>{time}</Text>
-          <View style={styles.count}>
-            <Text style={styles.countText}>{numberOfMessage}</Text>
-          </View>
-        </View>
-      </View>
+      </TouchableOpacity>
     </>
   );
 };

@@ -1,24 +1,22 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  ImageBackground,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import { Text, View, StyleSheet, ImageBackground, TouchableOpacity, Image } from 'react-native';
 const Home = () => {
   const localImage = require('../assets/images/photo.jpg');
   const personOne = require('../assets/images/p8.png');
   const personTwo = require('../assets/images/p7.png');
   const personThree = require('../assets/images/p6.png');
   const personFour = require('../assets/images/p5.png');
+  const navigation: any = useNavigation();
+  const navigating = () => {
+    navigation.navigate('List');
+  };
   return (
     <>
       <View style={styles.container}>
         <ImageBackground source={localImage} style={styles.backgroundImage}>
           <View>
-            <View style={{display: 'flex', flexDirection: 'row'}}>
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
               <View
                 style={{
                   ...styles.frameOne,
@@ -28,7 +26,7 @@ const Home = () => {
               />
               <Image
                 source={personOne}
-                style={{...styles.imageOne, marginTop: 20, marginLeft: 40}}
+                style={{ ...styles.imageOne, marginTop: 20, marginLeft: 40 }}
               />
               <View
                 style={{
@@ -36,37 +34,41 @@ const Home = () => {
                   marginLeft: 10,
                   marginTop: 70,
                   backgroundColor: '#703EFF',
-                }}></View>
+                }}
+              ></View>
               <Image
                 source={personTwo}
-                style={{...styles.imageTwo, marginTop: 20, marginLeft: 210}}
+                style={{ ...styles.imageTwo, marginTop: 20, marginLeft: 210 }}
               />
             </View>
             <View
               style={{
                 // display: 'flex',
                 flexDirection: 'row',
-              }}>
+              }}
+            >
               <View
                 style={{
                   ...styles.frameTwo,
                   marginLeft: 30,
                   marginTop: 70,
                   backgroundColor: '#703EFF',
-                }}></View>
+                }}
+              ></View>
               <Image
                 source={personThree}
-                style={{...styles.imageTwo, marginLeft: 20, marginTop: 20}}
+                style={{ ...styles.imageTwo, marginLeft: 20, marginTop: 20 }}
               />
               <View
                 style={{
                   ...styles.frameThree,
                   marginLeft: 30,
                   marginTop: 70,
-                }}></View>
+                }}
+              ></View>
               <Image
                 source={personFour}
-                style={{...styles.imageThree, marginLeft: 180, marginTop: 20}}
+                style={{ ...styles.imageThree, marginLeft: 180, marginTop: 20 }}
               />
             </View>
           </View>
@@ -75,18 +77,14 @@ const Home = () => {
           <Text style={styles.contentOne}>
             Enjoy the new experience of chatting with global friends
           </Text>
-          <Text style={styles.contentTwo}>
-            Connect peoplearound the world for free
-          </Text>
-          <TouchableOpacity style={styles.button}>
-            <Text style={{color: 'white', fontSize: 20}}>Get Started</Text>
+          <Text style={styles.contentTwo}>Connect peoplearound the world for free</Text>
+          <TouchableOpacity style={styles.button} onPress={navigating}>
+            <Text style={{ color: 'white', fontSize: 20 }}>Get Started</Text>
           </TouchableOpacity>
-          <View style={{marginTop: 20}}>
-            <Text style={{color: 'black'}}>
+          <View style={{ marginTop: 20 }}>
+            <Text style={{ color: 'black' }}>
               Powered by{' '}
-              <Text style={{color: '#11075C', fontWeight: '600', fontSize: 18}}>
-                ussage
-              </Text>
+              <Text style={{ color: '#11075C', fontWeight: '600', fontSize: 18 }}>ussage</Text>
             </Text>
           </View>
         </View>
@@ -110,9 +108,9 @@ const styles = StyleSheet.create({
   },
 
   containerOne: {},
-  content: {flex: 2, alignItems: 'center', justifyContent: 'center'},
-  contentOne: {fontSize: 27, fontWeight: '800', color: 'black'},
-  contentTwo: {marginTop: 10, fontSize: 17},
+  content: { flex: 2, alignItems: 'center', justifyContent: 'center' },
+  contentOne: { fontSize: 27, fontWeight: '800', color: 'black' },
+  contentTwo: { marginTop: 10, fontSize: 17 },
   button: {
     backgroundColor: '#703EFF',
     width: 340,

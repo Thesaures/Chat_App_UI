@@ -1,17 +1,20 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Home from '../screens/Home';
 import List from '../screens/List';
-const Tab = createBottomTabNavigator();
-const BottomNavigation = () => {
+import BottomTab from './Tab';
+import Individual from '../screens/Individual';
+import Phone from '../screens/Phone';
+const Stack = createStackNavigator();
+const StackNavigation = () => {
   return (
-    <Tab.Navigator screenOptions={{ tabBarActiveTintColor: 'red' }}>
-      <Tab.Screen name="Home" component={Home} />
-
-      <Tab.Screen name="List" component={List} />
-    </Tab.Navigator>
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+      <Stack.Screen name="List" component={BottomTab} options={{ headerShown: false }} />
+      <Stack.Screen name="Phone" component={Phone} options={{ headerShown: false }} />
+    </Stack.Navigator>
   );
 };
 
-export default BottomNavigation;
+export default StackNavigation;
