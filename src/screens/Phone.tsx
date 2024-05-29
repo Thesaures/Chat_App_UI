@@ -1,13 +1,20 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Image, FlatList, Modal, TouchableOpacity } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import { CameraOptions, launchCamera } from 'react-native-image-picker';
+import {
+  CameraOptions,
+  ImageLibraryOptions,
+  launchCamera,
+  launchImageLibrary,
+} from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const Phone = () => {
   const personOne = require('../assets/images/p3.png');
   type messages = { message: string; time: string };
   const [message, setMessage] = useState<messages[]>([]);
+  const [modal, setModal] = useState(false);
+  const [option, setOption] = useState(false);
   const currentTime = new Date();
 
   const [text, setText] = useState('');
@@ -31,7 +38,30 @@ const Phone = () => {
     }
   };
   const [selectedImage, setSelectedImage] = useState('');
+  // Gallery
+  const openImagePicker = () => {
+    setOption(false);
+    const options: ImageLibraryOptions = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setSelectedImage(imageUri);
+      }
+    });
+  };
+  // Cameraa
   const openCamera = async () => {
+    setOption(false);
     const options: CameraOptions = {
       mediaType: 'photo',
       includeBase64: false,
@@ -58,7 +88,6 @@ const Phone = () => {
     }
   };
   const showImage = (imageUri: string) => {
-    setSelectedImage(imageUri);
     if (imageUri) {
       let hours = currentTime.getHours();
       const minutes = currentTime.getMinutes();
@@ -78,9 +107,27 @@ const Phone = () => {
     }
   };
   console.log('this is image', message);
+  const callModal = (imageUri: string) => {
+    if (modal) {
+      setModal(false);
+    } else {
+      setModal(true);
+    }
+    setSelectedImage(imageUri);
+  };
   return (
     <>
       <View style={{ flexDirection: 'column', flex: 1, backgroundColor: '#FAFAFA' }}>
+        <Modal visible={option} transparent={true} onRequestClose={() => setOption(false)}>
+          <View style={styles.optionModal}>
+            <TouchableOpacity style={styles.button} onPress={openCamera}>
+              <Text style={{ color: 'white', fontWeight: '600' }}>Camera</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={openImagePicker}>
+              <Text style={{ color: 'white', fontWeight: '600' }}>Gallery</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
         <View style={styles.card}>
           <View>
             <Icon name={'keyboard-backspace'} size={30} />
@@ -105,46 +152,64 @@ const Phone = () => {
           </View>
         </View>
         <View style={styles.body}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <Text style={styles.textBoxLeft}>Hello everyone i am here</Text>
-            <Text style={{ marginLeft: 10 }}>9:22 PM</Text>
-            <Text style={styles.textBoxRight}>Hello Sebastian</Text>
-            <View style={styles.link}>
-              <Image source={personOne} style={styles.linkImage} />
-              <Text style={styles.linkText}>this is link</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                width: 75,
-                marginLeft: 40,
-              }}
-            >
-              <Text>9:45 pm</Text>
-              <Icon name={'done-all'} size={20} color={'blue'} />
-            </View>
-            <FlatList
-              data={message}
-              renderItem={({ item }) => (
-                <>
-                  <View style={styles.textTime}>
-                    {item.message.startsWith('file:///') ? (
-                      <Image
-                        style={{ height: 150, width: 100 }}
-                        source={{
-                          uri: item.message,
-                        }}
-                      ></Image>
-                    ) : (
-                      <Text style={styles.textBoxRight}>{item.message}</Text>
-                    )}
-                    <Text style={{ marginLeft: 10 }}>{item.time}</Text>
-                  </View>
-                </>
-              )}
-            />
-          </ScrollView>
+          <>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Text style={styles.textBoxLeft}>Hello everyone i am here</Text>
+              <Text style={{ marginLeft: 10 }}>9:22 PM</Text>
+              <Text style={styles.textBoxRight}>Hello Sebastian</Text>
+              <View style={styles.link}>
+                <Image source={personOne} style={styles.linkImage} />
+                <Text style={styles.linkText}>this is link</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  width: 75,
+                  marginLeft: 40,
+                }}
+              >
+                <Text>9:45 pm</Text>
+                <Icon name={'done-all'} size={20} color={'blue'} />
+              </View>
+              <FlatList
+                data={message}
+                renderItem={({ item }) => (
+                  <>
+                    <View style={styles.textTime}>
+                      {item.message.startsWith('file:///') ? (
+                        <>
+                          <Modal
+                            style={styles.modal}
+                            visible={modal}
+                            onRequestClose={() => setModal(false)}
+                          >
+                            <Image
+                              style={{ height: 850, width: 420 }}
+                              source={{
+                                uri: selectedImage,
+                              }}
+                            ></Image>
+                          </Modal>
+                          <TouchableOpacity onPress={() => callModal(item.message)}>
+                            <Image
+                              style={{ height: 150, width: 100 }}
+                              source={{
+                                uri: item.message,
+                              }}
+                            ></Image>
+                          </TouchableOpacity>
+                        </>
+                      ) : (
+                        <Text style={styles.textBoxRight}>{item.message}</Text>
+                      )}
+                      <Text style={{ marginLeft: 10 }}>{item.time}</Text>
+                    </View>
+                  </>
+                )}
+              />
+            </ScrollView>
+          </>
         </View>
         <View style={styles.bottom}>
           <View style={styles.inputView}>
@@ -155,8 +220,8 @@ const Phone = () => {
               onChangeText={setText}
               onSubmitEditing={showMessage}
             ></TextInput>
-            <Icon name={'circle'} size={30} />
-            <Icon name={'camera-alt'} size={30} onPress={openCamera} />
+            <Icon name={'circle'} size={30} onPress={openImagePicker} />
+            <Icon name={'camera-alt'} size={30} onPress={() => setOption(true)} />
           </View>
         </View>
       </View>
@@ -176,6 +241,11 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#FAFAFA',
   },
+  modal: {
+    // backgroundColor: 'red',
+
+    flex: 1,
+  },
   link: {
     flexDirection: 'column',
     marginBottom: 10,
@@ -191,6 +261,24 @@ const styles = StyleSheet.create({
     height: 200,
     width: 310,
     borderRadius: 40,
+  },
+  optionModal: {
+    backgroundColor: '#FFFFFF',
+    height: 120,
+    width: 170,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    marginVertical: 350,
+    marginHorizontal: 140,
+    borderRadius: 20,
+  },
+  button: {
+    backgroundColor: '#703EFF',
+    borderRadius: 20,
+    height: 40,
+    width: 100,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
   },
   bottom: {
     flex: 1,

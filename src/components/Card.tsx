@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    padding: 10,
+    // padding: 2,
   },
   image: {
     height: 80,
