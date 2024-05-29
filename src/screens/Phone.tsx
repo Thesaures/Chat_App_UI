@@ -30,7 +30,7 @@ const Phone = () => {
       setText('');
     }
   };
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState('');
   const openCamera = async () => {
     const options: CameraOptions = {
       mediaType: 'photo',
@@ -54,10 +54,30 @@ const Phone = () => {
       console.log('Image picker error: ', response.error);
     } else {
       let imageUri = response.uri || response.assets?.[0]?.uri;
-      setSelectedImage(imageUri);
+      showImage(imageUri);
     }
   };
-  console.log('this is image', selectedImage);
+  const showImage = (imageUri: string) => {
+    setSelectedImage(imageUri);
+    if (imageUri) {
+      let hours = currentTime.getHours();
+      const minutes = currentTime.getMinutes();
+      let meridiem = 'AM';
+      if (hours > 12) {
+        hours -= 12;
+        meridiem = 'PM';
+      } else if (hours === 0) {
+        hours = 12;
+      }
+      const newMessage = {
+        message: imageUri,
+        time: hours + ':' + minutes + ' ' + meridiem,
+      };
+      setMessage([...message, newMessage]);
+      setText('');
+    }
+  };
+  console.log('this is image', message);
   return (
     <>
       <View style={{ flexDirection: 'column', flex: 1, backgroundColor: '#FAFAFA' }}>
@@ -108,8 +128,19 @@ const Phone = () => {
               data={message}
               renderItem={({ item }) => (
                 <>
-                  <Text style={styles.textBoxLeft}>{item.message}</Text>
-                  <Text style={{ marginLeft: 10 }}>{item.time}</Text>
+                  <View style={styles.textTime}>
+                    {item.message.startsWith('file:///') ? (
+                      <Image
+                        style={{ height: 150, width: 100 }}
+                        source={{
+                          uri: item.message,
+                        }}
+                      ></Image>
+                    ) : (
+                      <Text style={styles.textBoxRight}>{item.message}</Text>
+                    )}
+                    <Text style={{ marginLeft: 10 }}>{item.time}</Text>
+                  </View>
                 </>
               )}
             />
@@ -273,9 +304,18 @@ const styles = StyleSheet.create({
   textBoxRight: {
     // height: 20,
     // width: 20,
-    marginBottom: 10,
     backgroundColor: '#703EFF',
     padding: 12,
+    borderBottomLeftRadius: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    alignSelf: 'flex-end',
+    color: 'white',
+  },
+  textTime: {
+    marginBottom: 10,
+    backgroundColor: '#FAFAFA',
+    // padding: 12,
     borderBottomLeftRadius: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
