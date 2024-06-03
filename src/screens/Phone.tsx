@@ -399,6 +399,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     alignSelf: 'flex-end',
     color: 'white',
+    marginBottom: 10,
   },
   textTime: {
     marginBottom: 10,
