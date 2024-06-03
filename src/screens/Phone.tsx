@@ -220,8 +220,30 @@ const Phone = () => {
               onChangeText={setText}
               onSubmitEditing={showMessage}
             ></TextInput>
-            <Icon name={'circle'} size={30} onPress={openImagePicker} />
-            <Icon name={'camera-alt'} size={30} onPress={() => setOption(true)} />
+            <View
+              style={{
+                flexDirection: 'row',
+                borderColor: 'grey',
+                backgroundColor: '#FAFAFA',
+                alignItems: 'center',
+
+                justifyContent: 'space-evenly',
+                borderLeftWidth: 2,
+              }}
+            >
+              <Icon
+                name={'circle'}
+                size={30}
+                onPress={openImagePicker}
+                style={{ marginLeft: 10 }}
+              />
+              <Icon
+                name={'camera-alt'}
+                size={30}
+                onPress={() => setOption(true)}
+                style={{ marginLeft: 10 }}
+              />
+            </View>
           </View>
         </View>
       </View>
